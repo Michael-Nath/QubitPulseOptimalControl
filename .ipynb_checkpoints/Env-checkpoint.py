@@ -30,10 +30,9 @@ qubit_freq = 4.71# load this from qiskit
 U_0 = np.array(np.identity(2,dtype=complex))
 
 
-class Env:
-    def __init__(self, dt=0.1, N=20 ): # two values in action space
+class Env(object):
+    def __init__(self, dt=0.1): # two values in action space
         super(Env, self).__init__()
-        self.n_actions = N
         self.n_features = 4 # correlated to neural network code
         self.state = np.array([1,0,0,0])
         self.nstep = 0 
@@ -60,6 +59,7 @@ class Env:
         else:
             U_0 = U * U_0
         psi = U_0 * psi
+        print(psi)
         err = math.log10(1 - (np.abs(psi.view(myarray).H * psi_target) ** 2).item(0).real)  # state fidelity error calculation
         if (self.nstep % 10 == 9):
             rwd = 10 * (err<0.5)+100 * (err<0.1)+5000*(err < 10e-3)   
